@@ -5,7 +5,7 @@ import {
   register,
   selectAuthError,
   selectAuthLoading
-} from '../../services/auth/slice';
+} from '../../services/slices/authSlice';
 import { TRegisterData } from '@api';
 import { useNavigate } from 'react-router-dom';
 
