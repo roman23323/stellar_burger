@@ -7,8 +7,11 @@ import {
   selectAuthLoading
 } from '../../services/auth/slice';
 import { TRegisterData } from '@api';
+import { useNavigate } from 'react-router-dom';
 
 export const Register: FC = () => {
+  const navigate = useNavigate();
+
   const [userName, setUserName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
