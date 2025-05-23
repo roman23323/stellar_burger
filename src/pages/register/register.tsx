@@ -24,7 +24,10 @@ export const Register: FC = () => {
       name: userName,
       password
     };
-    dispatch(register(regData));
+    dispatch(register(regData))
+      .unwrap()
+      .then(() => navigate('/'))
+      .catch((err) => console.log(err));
   };
 
   return (
