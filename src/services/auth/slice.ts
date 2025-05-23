@@ -2,6 +2,7 @@ import { registerUserApi, TAuthResponse, TRegisterData } from '@api';
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { TUser } from '@utils-types';
 import { RootState, useSelector } from '../store';
+import { setCookie } from '../../utils/cookie';
 
 type TErrorResponse = {
   rejectValue: string;
@@ -48,6 +49,8 @@ const authSlice = createSlice({
         state.isLoading = false;
         state.user = action.payload.user;
         state.accessToken = action.payload.accessToken;
+        setCookie('accessToken', action.payload.accessToken);
+        localStorage.setItem('refreshToken', action.payload.refreshToken);
       })
       .addCase(register.rejected, (state, action) => {
         state.isLoading = false;
