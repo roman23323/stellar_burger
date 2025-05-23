@@ -1,12 +1,13 @@
-import { registerUserApi, TAuthResponse, TRegisterData } from '@api';
+import {
+  registerUserApi,
+  TAuthResponse,
+  TErrorResponse,
+  TRegisterData
+} from '@api';
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { TUser } from '@utils-types';
 import { RootState, useSelector } from '../store';
 import { setCookie } from '../../utils/cookie';
-
-type TErrorResponse = {
-  rejectValue: string;
-};
 
 export const register = createAsyncThunk<
   TAuthResponse,
@@ -54,7 +55,7 @@ const authSlice = createSlice({
       })
       .addCase(register.rejected, (state, action) => {
         state.isLoading = false;
-        state.error = action.payload as string;
+        state.error = action.payload || 'Ошибка при регистрации';
       });
   }
 });
