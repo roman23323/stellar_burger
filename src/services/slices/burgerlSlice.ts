@@ -23,6 +23,8 @@ export type TIngredientsState = {
   buns: TIngredient[];
   sauces: TIngredient[];
   mains: TIngredient[];
+  _index: Record<string, TIngredient>;
+  selectedIngredient: TIngredient | null;
   isLoading: boolean;
   isLoaded: boolean;
   error: string | null;
@@ -32,6 +34,8 @@ const initialState: TIngredientsState = {
   buns: [],
   sauces: [],
   mains: [],
+  _index: {},
+  selectedIngredient: null,
   isLoading: false,
   isLoaded: false,
   error: null
@@ -54,6 +58,7 @@ const ingredientsSlice = createSlice({
         state.mains = [];
         state.sauces = [];
         action.payload.forEach((ingredient) => {
+          state._index[ingredient._id] = ingredient;
           switch (ingredient.type) {
             case 'bun':
               state.buns.push(ingredient);
@@ -82,6 +87,8 @@ export const ingredientsReducer = ingredientsSlice.reducer;
 export const selectBuns = (state: RootState) => state.ingredients.buns;
 export const selectSauces = (state: RootState) => state.ingredients.sauces;
 export const selectMains = (state: RootState) => state.ingredients.mains;
+export const selectIngredientById = (id: string) => (state: RootState) =>
+  state.ingredients._index[id];
 export const selectIsIngredientsLoading = (state: RootState) =>
   state.ingredients.isLoading;
 export const selectIsIngredientsLoaded = (state: RootState) =>
