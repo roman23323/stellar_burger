@@ -5,23 +5,11 @@ import styles from './constructor-page.module.css';
 import { BurgerIngredients } from '../../components';
 import { BurgerConstructor } from '../../components';
 import { Preloader } from '../../components/ui';
-import { FC, useEffect } from 'react';
-import {
-  ingredients,
-  selectIsIngredientsLoaded,
-  selectIsIngredientsLoading
-} from '../../services/slices/burgerlSlice';
+import { FC } from 'react';
+import { selectIsIngredientsLoading } from '../../services/slices/burgerlSlice';
 
 export const ConstructorPage: FC = () => {
   const isIngredientsLoading = useSelector(selectIsIngredientsLoading);
-  const isIngredientsLoaded = useSelector(selectIsIngredientsLoaded);
-  const dispatch = useDispatch();
-
-  useEffect(() => {
-    if (!isIngredientsLoaded) {
-      dispatch(ingredients());
-    }
-  }, []);
 
   return (
     <>

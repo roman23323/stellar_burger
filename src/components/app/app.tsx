@@ -11,19 +11,51 @@ import {
 } from '@pages';
 import '../../index.css';
 import styles from './app.module.css';
-import { Routes, Route } from 'react-router-dom';
+import { Routes, Route, useLocation, useNavigate } from 'react-router-dom';
 
-import { AppHeader } from '@components';
-import { Provider } from 'react-redux';
-import store from '../../services/store';
+import { AppHeader, IngredientDetails, Modal } from '@components';
+import { useDispatch, useSelector } from '../../services/store';
+import {
+  ingredients,
+  selectIsIngredientsLoaded
+} from '../../services/slices/burgerlSlice';
+import { useEffect } from 'react';
 
-const App = () => (
-  <div className={styles.app}>
-    <Provider store={store}>
+const App = () => {
+  const navigate = useNavigate();
+  const location = useLocation();
+  const backgroundLocation = location.state?.background;
+
+  const isIngredientsLoaded = useSelector(selectIsIngredientsLoaded);
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    if (!isIngredientsLoaded) {
+      dispatch(ingredients());
+    }
+  }, []);
+
+  return (
+    <div className={styles.app}>
       <AppHeader />
-      <Routes>
+
+      <Routes location={backgroundLocation || location}>
         <Route path='/' element={<ConstructorPage />} />
         <Route path='/feed' element={<Feed />} />
+        <Route
+          path='/feed/:number'
+          element={
+            <Modal title='/feed/:number' onClose={() => navigate('/')} />
+          }
+        />
+        <Route
+          path='/ingredients/:id'
+          element={
+            <Modal title='Детали ингредиента' onClose={() => navigate('/')}>
+              <IngredientDetails />
+            </Modal>
+          }
+        />
 
         {/* ----- Защитить: ----- */}
         <Route path='/login' element={<Login />} />
@@ -36,8 +68,27 @@ const App = () => (
 
         <Route path='*' element={<NotFound404 />} />
       </Routes>
-    </Provider>
-  </div>
-);
+
+      {backgroundLocation && (
+        <Routes>
+          <Route
+            path='/feed/:number'
+            element={
+              <Modal title='/feed/:number' onClose={() => navigate(-1)} />
+            }
+          />
+          <Route
+            path='/ingredients/:id'
+            element={
+              <Modal title='Детали ингредиента' onClose={() => navigate(-1)}>
+                <IngredientDetails />
+              </Modal>
+            }
+          />
+        </Routes>
+      )}
+    </div>
+  );
+};
 
 export default App;
