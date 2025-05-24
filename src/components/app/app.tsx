@@ -18,7 +18,7 @@ import { useDispatch, useSelector } from '../../services/store';
 import {
   ingredients,
   selectIsIngredientsLoaded
-} from '../../services/slices/burgerlSlice';
+} from '../../services/slices/ingredientsSlice';
 import { useEffect } from 'react';
 
 const App = () => {
