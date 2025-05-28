@@ -1,4 +1,4 @@
-import { Dispatch, SetStateAction } from 'react';
+import { Dispatch, ReactNode, SetStateAction } from 'react';
 import { PageUIProps } from '../common-type';
 
 export type RegisterUIProps = PageUIProps & {
@@ -6,4 +6,5 @@ export type RegisterUIProps = PageUIProps & {
   userName: string;
   setPassword: Dispatch<SetStateAction<string>>;
   setUserName: Dispatch<SetStateAction<string>>;
+  isLoading: boolean;
 };

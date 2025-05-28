@@ -7,6 +7,7 @@ import {
 import styles from '../common.module.css';
 import { Link } from 'react-router-dom';
 import { RegisterUIProps } from './type';
+import { Preloader } from '../../preloader';
 
 export const RegisterUI: FC<RegisterUIProps> = ({
   errorText,
@@ -16,7 +17,8 @@ export const RegisterUI: FC<RegisterUIProps> = ({
   password,
   setPassword,
   userName,
-  setUserName
+  setUserName,
+  isLoading
 }) => (
   <main className={styles.container}>
     <div className={`pt-6 ${styles.wrapCenter}`}>
@@ -70,6 +72,7 @@ export const RegisterUI: FC<RegisterUIProps> = ({
           )}
         </>
       </form>
+      <div className='pb-6'>{isLoading && <Preloader />}</div>
       <div className={`${styles.question} text text_type_main-default pb-6`}>
         Уже зарегистрированы?
         <Link to='/login' className={`pl-2 ${styles.link}`}>

@@ -44,6 +44,7 @@ export const fetchWithRefresh = async <T>(
     return await checkResponse<T>(res);
   } catch (err) {
     if ((err as { message: string }).message === 'jwt expired') {
+      console.log('Попытка автомаического обновлния токена');
       const refreshData = await refreshToken();
       if (options.headers) {
         (options.headers as { [key: string]: string }).authorization =
@@ -99,7 +100,7 @@ export const getOrdersApi = () =>
     return Promise.reject(data);
   });
 
-type TNewOrderResponse = TServerResponse<{
+export type TNewOrderResponse = TServerResponse<{
   order: TOrder;
   name: string;
 }>;
@@ -137,7 +138,7 @@ export type TRegisterData = {
   password: string;
 };
 
-type TAuthResponse = TServerResponse<{
+export type TAuthResponse = TServerResponse<{
   refreshToken: string;
   accessToken: string;
   user: TUser;
@@ -172,7 +173,12 @@ export const loginUserApi = (data: TLoginData) =>
   })
     .then((res) => checkResponse<TAuthResponse>(res))
     .then((data) => {
-      if (data?.success) return data;
+      if (data?.success) {
+        localStorage.setItem('refreshToken', data.refreshToken);
+        console.log('Сохранение access токена');
+        setCookie('accessToken', data.accessToken);
+        return data;
+      }
       return Promise.reject(data);
     });
 
@@ -204,7 +210,7 @@ export const resetPasswordApi = (data: { password: string; token: string }) =>
       return Promise.reject(data);
     });
 
-type TUserResponse = TServerResponse<{ user: TUser }>;
+export type TUserResponse = TServerResponse<{ user: TUser }>;
 
 export const getUserApi = () =>
   fetchWithRefresh<TUserResponse>(`${URL}/auth/user`, {
@@ -233,3 +239,6 @@ export const logoutApi = () =>
       token: localStorage.getItem('refreshToken')
     })
   }).then((res) => checkResponse<TServerResponse<{}>>(res));
+export type TErrorResponse = {
+  rejectValue: string;
+};
