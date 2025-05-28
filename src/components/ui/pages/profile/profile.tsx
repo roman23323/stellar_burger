@@ -11,6 +11,7 @@ export const ProfileUI: FC<ProfileUIProps> = ({
   formValue,
   isFormChanged,
   updateUserError,
+  updateUserResult,
   handleSubmit,
   handleCancel,
   handleInputChange
@@ -83,6 +84,11 @@ export const ProfileUI: FC<ProfileUIProps> = ({
             className={`${commonStyles.error} pt-5 text text_type_main-default`}
           >
             {updateUserError}
+          </p>
+        )}
+        {updateUserResult && (
+          <p className={`pt-5 text text_type_main-default`}>
+            {updateUserResult}
           </p>
         )}
       </>

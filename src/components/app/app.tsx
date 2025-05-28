@@ -13,13 +13,20 @@ import '../../index.css';
 import styles from './app.module.css';
 import { Routes, Route, useLocation, useNavigate } from 'react-router-dom';
 
-import { AppHeader, IngredientDetails, Modal } from '@components';
+import { AppHeader, IngredientDetails, Modal, OrderInfo } from '@components';
 import { useDispatch, useSelector } from '../../services/store';
 import {
   ingredients,
   selectIsIngredientsLoaded
 } from '../../services/slices/ingredientsSlice';
 import { useEffect } from 'react';
+import { ProtectedRoute } from '../protected-route/protected-route';
+import {
+  getUserWithToken,
+  selectIsAuthLoading,
+  selectUser
+} from '../../services/slices/authSlice';
+import { deleteCookie, getCookie } from '../../utils/cookie';
 
 const App = () => {
   const navigate = useNavigate();
@@ -27,6 +34,9 @@ const App = () => {
   const backgroundLocation = location.state?.background;
 
   const isIngredientsLoaded = useSelector(selectIsIngredientsLoaded);
+  const user = useSelector(selectUser);
+  const isLoading = useSelector(selectIsAuthLoading);
+
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -34,6 +44,22 @@ const App = () => {
       dispatch(ingredients());
     }
   }, []);
+
+  useEffect(() => {
+    const token =
+      getCookie('accessToken') || localStorage.getItem('refreshToken');
+    console.log(
+      'Токен для входа: ',
+      token,
+      'Куки с accessToken: ',
+      getCookie('accessToken'),
+      'refreshToken из хранилища: ',
+      localStorage.getItem('refreshToken')
+    );
+    if (token && !user && !isLoading) {
+      dispatch(getUserWithToken());
+    }
+  }, [dispatch, user, isLoading]);
 
   return (
     <div className={styles.app}>
@@ -58,13 +84,54 @@ const App = () => {
         />
 
         {/* ----- Защитить: ----- */}
-        <Route path='/login' element={<Login />} />
-        <Route path='/register' element={<Register />} />
-        <Route path='/forgot-password' element={<ForgotPassword />} />
-        <Route path='/reset-password' element={<ResetPassword />} />
-        <Route path='/profile' element={<Profile />}>
-          <Route path='orders' element={<ProfileOrders />} />
-        </Route>
+        <Route
+          path='/login'
+          element={
+            <ProtectedRoute onlyUnAuth>
+              <Login />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path='/register'
+          element={
+            <ProtectedRoute onlyUnAuth>
+              <Register />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path='/forgot-password'
+          element={
+            <ProtectedRoute onlyUnAuth>
+              <ForgotPassword />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path='/reset-password'
+          element={
+            <ProtectedRoute onlyUnAuth>
+              <ResetPassword />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path='/profile'
+          element={
+            <ProtectedRoute>
+              <Profile />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path='/profile/orders'
+          element={
+            <ProtectedRoute>
+              <ProfileOrders />
+            </ProtectedRoute>
+          }
+        />
 
         <Route path='*' element={<NotFound404 />} />
       </Routes>
@@ -82,6 +149,14 @@ const App = () => {
             element={
               <Modal title='Детали ингредиента' onClose={() => navigate(-1)}>
                 <IngredientDetails />
+              </Modal>
+            }
+          />
+          <Route
+            path='/profile/orders/:number'
+            element={
+              <Modal title='Детали заказа' onClose={() => navigate(-1)}>
+                <OrderInfo />
               </Modal>
             }
           />

@@ -58,11 +58,12 @@ const constructorSlice = createSlice({
       newIngredients.splice(newIndex, 0, movedItem);
 
       state.ingredients = newIngredients;
-    }
+    },
+    removeAll: (state: TConstructorState) => (state = initialState)
   }
 });
 
-export const { addIngredient, removeIngredient, moveIngredient } =
+export const { addIngredient, removeIngredient, moveIngredient, removeAll } =
   constructorSlice.actions;
 
 export const constructorReducer = constructorSlice.reducer;

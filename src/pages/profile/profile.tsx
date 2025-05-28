@@ -1,9 +1,12 @@
 import { ProfileUI } from '@ui-pages';
 import { FC, SyntheticEvent, useEffect, useState } from 'react';
+import { useSelector } from '../../services/store';
+import { selectUser, updateUserData } from '../../services/slices/authSlice';
+import { updateUserApi } from '@api';
+import { useDispatch } from 'react-redux';
 
 export const Profile: FC = () => {
-  /** TODO: взять переменную из стора */
-  const user = {
+  const user = useSelector(selectUser) || {
     name: '',
     email: ''
   };
@@ -13,6 +16,10 @@ export const Profile: FC = () => {
     email: user.email,
     password: ''
   });
+
+  const [error, setError] = useState<string | undefined>(undefined);
+  const [updateInfo, setUpdateInfo] = useState<string | undefined>(undefined);
+  const dispatch = useDispatch();
 
   useEffect(() => {
     setFormValue((prevState) => ({
@@ -29,6 +36,16 @@ export const Profile: FC = () => {
 
   const handleSubmit = (e: SyntheticEvent) => {
     e.preventDefault();
+    updateUserApi(formValue).then((res) => {
+      console.log(res.success);
+      if (res.success) {
+        dispatch(updateUserData(res.user));
+        setUpdateInfo('Данные обновлены');
+        console.log('Данные обновлены');
+      } else {
+        setError('Ошибка при изменении данных аккаунта');
+      }
+    });
   };
 
   const handleCancel = (e: SyntheticEvent) => {
@@ -54,8 +71,8 @@ export const Profile: FC = () => {
       handleCancel={handleCancel}
       handleSubmit={handleSubmit}
       handleInputChange={handleInputChange}
+      updateUserError={error}
+      updateUserResult={updateInfo}
     />
   );
-
-  return null;
 };

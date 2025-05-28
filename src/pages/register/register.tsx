@@ -4,7 +4,7 @@ import { RootState, useDispatch, useSelector } from '../../services/store';
 import {
   register,
   selectAuthError,
-  selectAuthLoading
+  selectIsAuthLoading
 } from '../../services/slices/authSlice';
 import { TRegisterData } from '@api';
 import { useNavigate } from 'react-router-dom';
@@ -17,7 +17,7 @@ export const Register: FC = () => {
   const [password, setPassword] = useState('');
 
   const error = useSelector(selectAuthError);
-  const isLoading = useSelector(selectAuthLoading);
+  const isLoading = useSelector(selectIsAuthLoading);
   const dispatch = useDispatch();
 
   const handleSubmit = (e: SyntheticEvent) => {
