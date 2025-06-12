@@ -32,7 +32,7 @@ export type TOrderState = {
   isUpToDate: boolean;
 };
 
-const initialState: TOrderState = {
+export const initialState: TOrderState = {
   orderRequest: false,
   orderModalData: null,
   orders: [],
