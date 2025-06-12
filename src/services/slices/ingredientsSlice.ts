@@ -3,7 +3,7 @@ import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { TIngredient } from '@utils-types';
 import { RootState } from '../store';
 
-export const ingredients = createAsyncThunk<
+export const getIngredients = createAsyncThunk<
   TIngredient[],
   void,
   TErrorResponse

@@ -16,7 +16,7 @@ import { Routes, Route, useLocation, useNavigate } from 'react-router-dom';
 import { AppHeader, IngredientDetails, Modal, OrderInfo } from '@components';
 import { useDispatch, useSelector } from '../../services/store';
 import {
-  ingredients,
+  getIngredients,
   selectIsIngredientsLoaded
 } from '../../services/slices/ingredientsSlice';
 import { useEffect } from 'react';
