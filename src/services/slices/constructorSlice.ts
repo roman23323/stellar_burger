@@ -1,4 +1,4 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { createSlice, nanoid, PayloadAction } from '@reduxjs/toolkit';
 import { TConstructorIngredient, TIngredient } from '@utils-types';
 import { RootState } from '../store';
 
@@ -16,19 +16,19 @@ const constructorSlice = createSlice({
   name: 'constructor',
   initialState,
   reducers: {
-    addIngredient: (
-      state: TConstructorState,
-      action: PayloadAction<TIngredient>
-    ) => {
-      const ingredient = action.payload;
-
-      if (ingredient.type === 'bun') {
-        state.bun = { ...ingredient, id: crypto.randomUUID() };
-      } else {
-        state.ingredients.push({
-          ...ingredient,
-          id: crypto.randomUUID()
-        });
+    addIngredient: {
+      reducer(state, action: PayloadAction<TConstructorIngredient>) {
+        const ingredient = action.payload;
+        if (ingredient.type === 'bun') {
+          state.bun = ingredient;
+        } else {
+          state.ingredients.push(ingredient);
+        }
+      },
+      prepare(ingredient: TIngredient) {
+        return {
+          payload: { ...ingredient, id: nanoid() }
+        };
       }
     },
     removeIngredient: (
