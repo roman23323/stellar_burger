@@ -33,10 +33,10 @@ const constructorSlice = createSlice({
     },
     removeIngredient: (
       state: TConstructorState,
-      action: PayloadAction<TConstructorIngredient>
+      action: PayloadAction<string>
     ) => {
       state.ingredients = state.ingredients.filter(
-        (i) => i.id != action.payload.id
+        (i) => i.id != action.payload
       );
     },
     moveIngredient: (
