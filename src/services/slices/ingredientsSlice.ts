@@ -9,10 +9,7 @@ export const ingredients = createAsyncThunk<
   TErrorResponse
 >('ingredients', async (_, { rejectWithValue }) =>
   getIngredientsApi()
-    .then((res) => {
-      console.log('Есть результат: ', res);
-      return res;
-    })
+    .then((res) => res)
     .catch((err) => {
       console.log(err);
       return rejectWithValue(err.message);
