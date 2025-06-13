@@ -44,11 +44,11 @@ const ingredientsSlice = createSlice({
   reducers: {},
   extraReducers: (builder) => {
     builder
-      .addCase(ingredients.pending, (state) => {
+      .addCase(getIngredients.pending, (state) => {
         state.isLoading = true;
         state.isLoaded = false;
       })
-      .addCase(ingredients.fulfilled, (state, action) => {
+      .addCase(getIngredients.fulfilled, (state, action) => {
         state.isLoading = false;
         state.isLoaded = true;
         state.buns = [];
@@ -72,7 +72,7 @@ const ingredientsSlice = createSlice({
           }
         });
       })
-      .addCase(ingredients.rejected, (state, action) => {
+      .addCase(getIngredients.rejected, (state, action) => {
         state.isLoading = false;
         state.error = action.payload || 'Ошибка при получении ингредиентов';
       });

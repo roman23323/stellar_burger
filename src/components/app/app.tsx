@@ -41,7 +41,7 @@ const App = () => {
 
   useEffect(() => {
     if (!isIngredientsLoaded) {
-      dispatch(ingredients());
+      dispatch(getIngredients());
     }
   }, []);
 
