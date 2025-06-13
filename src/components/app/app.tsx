@@ -26,7 +26,7 @@ import {
   selectIsAuthLoading,
   selectUser
 } from '../../services/slices/authSlice';
-import { deleteCookie, getCookie } from '../../utils/cookie';
+import { getCookie } from '../../utils/cookie';
 
 const App = () => {
   const navigate = useNavigate();
@@ -48,14 +48,6 @@ const App = () => {
   useEffect(() => {
     const token =
       getCookie('accessToken') || localStorage.getItem('refreshToken');
-    console.log(
-      'Токен для входа: ',
-      token,
-      'Куки с accessToken: ',
-      getCookie('accessToken'),
-      'refreshToken из хранилища: ',
-      localStorage.getItem('refreshToken')
-    );
     if (token && !user && !isLoading) {
       dispatch(getUserWithToken());
     }
