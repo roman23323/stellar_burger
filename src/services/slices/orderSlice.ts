@@ -12,14 +12,11 @@ export const postOrder = createAsyncThunk<
   TNewOrderResponse,
   string[],
   TErrorResponse
->('orders/create', async (ingredients, { rejectWithValue }) => {
-  try {
-    const data = await orderBurgerApi(ingredients);
-    return data;
-  } catch (err: any) {
-    return rejectWithValue(err.message);
-  }
-});
+>('orders/create', async (ingredients, { rejectWithValue }) =>
+  orderBurgerApi(ingredients)
+    .then((res) => res)
+    .catch((err) => rejectWithValue(err))
+);
 
 export const getOrders = createAsyncThunk<TOrder[], void, TErrorResponse>(
   'orders/get',
@@ -70,11 +67,12 @@ const orderSlice = createSlice({
       })
       .addCase(postOrder.rejected, (state, action) => {
         state.orderRequest = false;
-        state.error = action.error.message || 'Ошибка при создании заказа';
+        state.error = action.payload || 'Ошибка при создании заказа';
       })
 
       .addCase(getOrders.pending, (state) => {
         state.isLoading = true;
+        state.error = null;
       })
       .addCase(getOrders.fulfilled, (state, action) => {
         state.orders = action.payload;
@@ -83,6 +81,7 @@ const orderSlice = createSlice({
       })
       .addCase(getOrders.rejected, (state, action) => {
         state.isLoading = false;
+        state.error = action.payload || 'Ошибка при получении списка заказов';
       });
   }
 });
