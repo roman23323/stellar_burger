@@ -12,7 +12,6 @@ import {
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { TUser } from '@utils-types';
 import { RootState } from '../store';
-import { deleteCookie } from '../../utils/cookie';
 
 export const getUserWithToken = createAsyncThunk<
   TUserResponse,
@@ -125,8 +124,6 @@ const authSlice = createSlice({
       .addCase(logout.fulfilled, (state) => {
         state.isLoading = false;
         state.user = null;
-        deleteCookie('accessToken');
-        localStorage.removeItem('refreshToken');
       })
       .addCase(logout.rejected, (state, action) => {
         state.isLoading = false;
