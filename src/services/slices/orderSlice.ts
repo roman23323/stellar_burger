@@ -1,12 +1,17 @@
-import { getOrdersApi, orderBurgerApi, TErrorResponse } from '@api';
+import {
+  getOrdersApi,
+  orderBurgerApi,
+  TErrorResponse,
+  TNewOrderResponse
+} from '@api';
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { TOrder } from '@utils-types';
 import { RootState } from '../store';
 
 export const postOrder = createAsyncThunk<
-  { order: TOrder; name: string },
+  TNewOrderResponse,
   string[],
-  { rejectValue: string }
+  TErrorResponse
 >('orders/create', async (ingredients, { rejectWithValue }) => {
   try {
     const data = await orderBurgerApi(ingredients);
