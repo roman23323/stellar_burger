@@ -11,13 +11,14 @@ describe('ingredientsSlice reducer', () => {
   });
 
   it('должен присвоить isLoading = true, isLoaded = false', () => {
-    // Создадим экшен вручную, чтобы избежать мокирование запроса api
+    // Создадим стейт и экшен getIngredients.pending
+    const state = { ...initialState };
     const pending = { type: getIngredients.pending.type };
 
     // Применяем экшен и проверяем стейт
-    const statePending = ingredientsReducer(initialState, pending);
+    const statePending = ingredientsReducer(state, pending);
     expect(statePending).toEqual({
-      ...initialState,
+      ...state,
       isLoading: true,
       isLoaded: false
     });
@@ -43,16 +44,17 @@ describe('ingredientsSlice reducer', () => {
     const bun = { ...baseIngr, _id: '2', type: 'bun' };
     const ingredients = [main, sauce, bun];
 
-    // Создаём экшен getIngedients.fulfilled
+    // Создаём стейт экшен getIngedients.fulfilled
+    const state = { ...initialState };
     const fulfilled = {
       type: getIngredients.fulfilled.type,
       payload: ingredients
     };
 
     // Применяем экшен и проверяем стейт
-    const stateFulfilled = ingredientsReducer(initialState, fulfilled);
+    const stateFulfilled = ingredientsReducer(state, fulfilled);
     expect(stateFulfilled).toEqual({
-      ...initialState,
+      ...state,
       buns: [bun],
       sauces: [sauce],
       mains: [main],
@@ -77,9 +79,9 @@ describe('ingredientsSlice reducer', () => {
     // Создаём стейт в состоянии pending
     const statePending = { ...initialState, isLoading: true };
 
-    // Применяим экшен и проверяем стейт
-    const state = ingredientsReducer(statePending, rejected);
-    expect(state).toEqual({
+    // Применяем экшен и проверяем стейт
+    const stateRejected = ingredientsReducer(statePending, rejected);
+    expect(stateRejected).toEqual({
       ...statePending,
       isLoading: false,
       error: errorMessage

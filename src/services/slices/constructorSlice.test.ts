@@ -42,18 +42,17 @@ describe('constructorSlice reducer', () => {
   });
 
   it('должен добавить ингредиент в стейт', () => {
+    const state = { ...initialState };
     const action = addIngredient(main);
-    const state = constructorReducer(initialState, action);
-    expect(state).toEqual({ bun: null, ingredients: [action.payload] });
+    const stateAdd = constructorReducer(state, action);
+    expect(stateAdd).toEqual({ bun: null, ingredients: [action.payload] });
   });
 
   it('должен добавить ингредиент, а затем удалить его', () => {
     // Готовим стейт - добавляем ингредиент
+    const state = { ...initialState };
     const actionAddIngredient = addIngredient(sauce);
-    const stateWithIngredient = constructorReducer(
-      initialState,
-      actionAddIngredient
-    );
+    const stateWithIngredient = constructorReducer(state, actionAddIngredient);
 
     // Извлекаем подготовленный (с полем 'id') ингредиент
     const ingredientPrepared = actionAddIngredient.payload;
@@ -85,7 +84,8 @@ describe('constructorSlice reducer', () => {
     const saucePrepared = actionAddIngredient2.payload;
 
     // Создаём стейт, добавляем ингредиенты
-    let state = constructorReducer(initialState, actionAddIngredient1);
+    let state = { ...initialState };
+    state = constructorReducer(state, actionAddIngredient1);
     state = constructorReducer(state, actionAddIngredient2);
 
     // Проверяем, что ингредиенты добавлены
@@ -109,7 +109,8 @@ describe('constructorSlice reducer', () => {
     const saucePrepared = actionAddIngredient2.payload;
 
     // Создаём стейт, добавляем ингредиенты
-    let state = constructorReducer(initialState, actionAddIngredient1);
+    let state = { ...initialState };
+    state = constructorReducer(state, actionAddIngredient1);
     state = constructorReducer(state, actionAddIngredient2);
 
     // Проверяем, что ингредиенты добавлены

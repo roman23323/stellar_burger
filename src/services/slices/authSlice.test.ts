@@ -9,6 +9,8 @@ import {
 } from './authSlice';
 
 describe('authSlice reducer', () => {
+  const userData = { email: 'mail@email.com', name: 'Имя' };
+
   it('должен вернуть initialState', () => {
     const state = authReducer(undefined, { type: 'unknown' });
     expect(state).toEqual(initialState);
@@ -17,9 +19,8 @@ describe('authSlice reducer', () => {
   it('должен обновить данные пользователя', () => {
     // Создаём начальный стейт и обновлённые данные пользователя
     const state = {
-      user: { name: 'Имя 1', email: 'mail1@email.com' },
-      isLoading: false,
-      error: null
+      ...initialState,
+      user: { name: 'Имя 1', email: 'mail1@email.com' }
     };
     const userUpdated = { name: 'Имя 2', email: 'mail2@email.com' };
 
@@ -43,7 +44,6 @@ describe('authSlice reducer', () => {
     it('должен присвоить isLoading = false и новые данные пользователя', () => {
       // Создаём начальный стейт и экшен pending.fulfilled
       const state = { ...initialState, isLoading: true };
-      const userData = { email: 'mail@email.com', name: 'Имя' };
       const payload = {
         success: true,
         accessToken: 'at',
@@ -76,7 +76,7 @@ describe('authSlice reducer', () => {
       // Применяем экшен и проверяем новый стейт
       const stateRejected = authReducer(state, registerRejected);
       expect(stateRejected).toEqual({
-        ...initialState,
+        ...state,
         isLoading: false,
         error: errorMessage
       });
@@ -92,7 +92,7 @@ describe('authSlice reducer', () => {
       // Применяем экшен и проверяем новое состояние
       const statePending = authReducer(state, loginPending);
       expect(statePending).toEqual({
-        ...initialState,
+        ...state,
         isLoading: true,
         error: null
       });
@@ -101,7 +101,6 @@ describe('authSlice reducer', () => {
     it('должен присвоить isLoading = false и заполнить данные о пользователе', () => {
       // Создаём начальный стейт и экшен login.fulfilled
       const state = { ...initialState, isLoading: true };
-      const userData = { email: 'mail@email.com', name: 'Имя' };
       const payload = {
         success: true,
         accessToken: 'at',
@@ -113,7 +112,7 @@ describe('authSlice reducer', () => {
       // Применяем экшен и проверяем новый стейт
       const stateFulfilled = authReducer(state, loginfulfilled);
       expect(stateFulfilled).toEqual({
-        ...initialState,
+        ...state,
         isLoading: false,
         user: userData
       });
@@ -131,7 +130,7 @@ describe('authSlice reducer', () => {
       // Применяем экшен и проверяем стейт
       const stateRejected = authReducer(state, loginRejected);
       expect(stateRejected).toEqual({
-        ...initialState,
+        ...state,
         isLoading: false,
         error: errorMessage
       });
@@ -147,7 +146,7 @@ describe('authSlice reducer', () => {
       // Применяем экшен и проверяем стейт
       const statePending = authReducer(state, userPending);
       expect(statePending).toEqual({
-        ...initialState,
+        ...state,
         isLoading: true,
         error: null
       });
@@ -156,14 +155,13 @@ describe('authSlice reducer', () => {
     it('должен присвоить isLoading = false и заполнить данные пользователя', () => {
       // Создаём стейт и экшен getUserWithToken.fulfilled
       const state = { ...initialState, isLoading: true };
-      const userData = { email: 'mail@email.com', name: 'Имя' };
       const payload = { success: true, user: userData };
       const userFulfilled = { type: getUserWithToken.fulfilled.type, payload };
 
       // Применяем экшен и проверяем стейт
       const stateFulfilled = authReducer(state, userFulfilled);
       expect(stateFulfilled).toEqual({
-        ...initialState,
+        ...state,
         isLoading: false,
         user: userData
       });
@@ -181,7 +179,7 @@ describe('authSlice reducer', () => {
       // Применяем экшен и проверяем стейт
       const stateRejected = authReducer(state, userRejected);
       expect(stateRejected).toEqual({
-        ...initialState,
+        ...state,
         isLoading: false,
         error: errorMessage
       });
@@ -197,21 +195,20 @@ describe('authSlice reducer', () => {
       // Применяем экшен и проверяем стейт
       const statePending = authReducer(state, logoutPending);
       expect(statePending).toEqual({
-        ...initialState,
+        ...state,
         isLoading: true
       });
     });
 
     it('должен присвоить isLoading = false, user = null', () => {
       // Создаём стейт и экшен logout.fulfilled
-      const userData = { email: 'mail@email.com', name: 'Имя' };
       const state = { ...initialState, isLoading: true, user: userData };
       const logoutFulfilled = { type: logout.fulfilled.type };
 
       // Применяем экшен и проверяем стейт
       const stateFulfilled = authReducer(state, logoutFulfilled);
       expect(stateFulfilled).toEqual({
-        ...initialState,
+        ...state,
         isLoading: false,
         user: null
       });
@@ -229,7 +226,7 @@ describe('authSlice reducer', () => {
       // Применяем экшен и проверяем стейт
       const stateRejected = authReducer(state, logoutRejected);
       expect(stateRejected).toEqual({
-        ...initialState,
+        ...state,
         isLoading: false,
         error: errorMessage
       });
