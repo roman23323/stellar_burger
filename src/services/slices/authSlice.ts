@@ -116,6 +116,7 @@ const authSlice = createSlice({
       })
       .addCase(getUserWithToken.rejected, (state, action) => {
         state.isLoading = false;
+        state.error = action.payload || 'Ошибка получения данных пользователя';
       })
 
       .addCase(logout.pending, (state) => {
