@@ -8,7 +8,7 @@ import {
   removeIngredient
 } from './constructorSlice';
 
-describe('constructorSlice reducer', () => {
+describe('проверка редьюсера constructorSlice', () => {
   const main: TIngredient = {
     _id: '1',
     name: 'Ингредиент 1',

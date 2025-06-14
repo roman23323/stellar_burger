@@ -4,7 +4,7 @@ import {
   initialState
 } from './ingredientsSlice';
 
-describe('ingredientsSlice reducer', () => {
+describe('проверка редьюсера ingredientsSlice', () => {
   it('должен вернуть initialState', () => {
     const state = ingredientsReducer(undefined, { type: 'unknown' });
     expect(state).toEqual(initialState);

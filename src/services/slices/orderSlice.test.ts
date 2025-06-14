@@ -6,7 +6,7 @@ import {
   postOrder
 } from './orderSlice';
 
-describe('orderSlice reducer', () => {
+describe('проверка редьюсера orderSlice', () => {
   const order = {
     _id: '1',
     status: '',

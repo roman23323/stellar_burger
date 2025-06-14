@@ -8,7 +8,7 @@ import {
   updateUserData
 } from './authSlice';
 
-describe('authSlice reducer', () => {
+describe('проверка редьюсера authSlice', () => {
   const userData = { email: 'mail@email.com', name: 'Имя' };
 
   it('должен вернуть initialState', () => {
