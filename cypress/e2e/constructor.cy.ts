@@ -32,5 +32,6 @@ describe('проверка конструктора бургера', () => {
 
     // Проверяем, что в коснтруктор бургера добавились ингредиенты
     cy.get('[data-testid^="constructor-"]').should('have.length', 4);
+    cy.get('[data-testid^="constructor-bun-"').should('have.length', 2);
   });
 });
