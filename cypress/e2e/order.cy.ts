@@ -51,6 +51,14 @@ describe('проверка создания заказа', () => {
     cy.wait('@getIngredients');
   });
 
+  // Очищаем cookie и localStorage после тестов
+  afterEach(() => {
+    cy.clearCookie('accessToken');
+    cy.window().then((win) => {
+      win.localStorage.removeItem('refreshToken');
+    });
+  });
+
   it('должен собраться бургер', () => {
     // Добавляем булочки, начинку и соус в бургер
     ingredients_id.forEach((id) => {
