@@ -1,20 +1,22 @@
-import { getOrdersApi, orderBurgerApi, TErrorResponse } from '@api';
+import {
+  getOrdersApi,
+  orderBurgerApi,
+  TErrorResponse,
+  TNewOrderResponse
+} from '@api';
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { TOrder } from '@utils-types';
 import { RootState } from '../store';
 
 export const postOrder = createAsyncThunk<
-  { order: TOrder; name: string },
+  TNewOrderResponse,
   string[],
-  { rejectValue: string }
->('orders/create', async (ingredients, { rejectWithValue }) => {
-  try {
-    const data = await orderBurgerApi(ingredients);
-    return data;
-  } catch (err: any) {
-    return rejectWithValue(err.message);
-  }
-});
+  TErrorResponse
+>('orders/create', async (ingredients, { rejectWithValue }) =>
+  orderBurgerApi(ingredients)
+    .then((res) => res)
+    .catch((err) => rejectWithValue(err))
+);
 
 export const getOrders = createAsyncThunk<TOrder[], void, TErrorResponse>(
   'orders/get',
@@ -30,14 +32,16 @@ export type TOrderState = {
   orders: TOrder[];
   isLoading: boolean;
   isUpToDate: boolean;
+  error: string | null;
 };
 
-const initialState: TOrderState = {
+export const initialState: TOrderState = {
   orderRequest: false,
   orderModalData: null,
   orders: [],
   isLoading: false,
-  isUpToDate: false
+  isUpToDate: false,
+  error: null
 };
 
 const orderSlice = createSlice({
@@ -53,6 +57,7 @@ const orderSlice = createSlice({
       .addCase(postOrder.pending, (state) => {
         state.orderRequest = true;
         state.orderModalData = null;
+        state.error = null;
       })
       .addCase(postOrder.fulfilled, (state, action) => {
         const order = action.payload.order;
@@ -62,10 +67,12 @@ const orderSlice = createSlice({
       })
       .addCase(postOrder.rejected, (state, action) => {
         state.orderRequest = false;
+        state.error = action.payload || 'Ошибка при создании заказа';
       })
 
       .addCase(getOrders.pending, (state) => {
         state.isLoading = true;
+        state.error = null;
       })
       .addCase(getOrders.fulfilled, (state, action) => {
         state.orders = action.payload;
@@ -74,6 +81,7 @@ const orderSlice = createSlice({
       })
       .addCase(getOrders.rejected, (state, action) => {
         state.isLoading = false;
+        state.error = action.payload || 'Ошибка при получении списка заказов';
       });
   }
 });

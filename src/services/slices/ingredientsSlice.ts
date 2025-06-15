@@ -3,16 +3,13 @@ import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { TIngredient } from '@utils-types';
 import { RootState } from '../store';
 
-export const ingredients = createAsyncThunk<
+export const getIngredients = createAsyncThunk<
   TIngredient[],
   void,
   TErrorResponse
 >('ingredients', async (_, { rejectWithValue }) =>
   getIngredientsApi()
-    .then((res) => {
-      console.log('Есть результат: ', res);
-      return res;
-    })
+    .then((res) => res)
     .catch((err) => {
       console.log(err);
       return rejectWithValue(err.message);
@@ -30,7 +27,7 @@ export type TIngredientsState = {
   error: string | null;
 };
 
-const initialState: TIngredientsState = {
+export const initialState: TIngredientsState = {
   buns: [],
   sauces: [],
   mains: [],
@@ -47,11 +44,11 @@ const ingredientsSlice = createSlice({
   reducers: {},
   extraReducers: (builder) => {
     builder
-      .addCase(ingredients.pending, (state) => {
+      .addCase(getIngredients.pending, (state) => {
         state.isLoading = true;
         state.isLoaded = false;
       })
-      .addCase(ingredients.fulfilled, (state, action) => {
+      .addCase(getIngredients.fulfilled, (state, action) => {
         state.isLoading = false;
         state.isLoaded = true;
         state.buns = [];
@@ -75,7 +72,7 @@ const ingredientsSlice = createSlice({
           }
         });
       })
-      .addCase(ingredients.rejected, (state, action) => {
+      .addCase(getIngredients.rejected, (state, action) => {
         state.isLoading = false;
         state.error = action.payload || 'Ошибка при получении ингредиентов';
       });

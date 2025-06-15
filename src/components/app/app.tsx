@@ -16,7 +16,7 @@ import { Routes, Route, useLocation, useNavigate } from 'react-router-dom';
 import { AppHeader, IngredientDetails, Modal, OrderInfo } from '@components';
 import { useDispatch, useSelector } from '../../services/store';
 import {
-  ingredients,
+  getIngredients,
   selectIsIngredientsLoaded
 } from '../../services/slices/ingredientsSlice';
 import { useEffect } from 'react';
@@ -26,7 +26,7 @@ import {
   selectIsAuthLoading,
   selectUser
 } from '../../services/slices/authSlice';
-import { deleteCookie, getCookie } from '../../utils/cookie';
+import { getCookie } from '../../utils/cookie';
 
 const App = () => {
   const navigate = useNavigate();
@@ -41,21 +41,13 @@ const App = () => {
 
   useEffect(() => {
     if (!isIngredientsLoaded) {
-      dispatch(ingredients());
+      dispatch(getIngredients());
     }
   }, []);
 
   useEffect(() => {
     const token =
       getCookie('accessToken') || localStorage.getItem('refreshToken');
-    console.log(
-      'Токен для входа: ',
-      token,
-      'Куки с accessToken: ',
-      getCookie('accessToken'),
-      'refreshToken из хранилища: ',
-      localStorage.getItem('refreshToken')
-    );
     if (token && !user && !isLoading) {
       dispatch(getUserWithToken());
     }

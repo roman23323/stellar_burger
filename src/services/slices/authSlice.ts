@@ -12,7 +12,6 @@ import {
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { TUser } from '@utils-types';
 import { RootState } from '../store';
-import { deleteCookie } from '../../utils/cookie';
 
 export const getUserWithToken = createAsyncThunk<
   TUserResponse,
@@ -63,7 +62,7 @@ export type TAuthState = {
   error: string | null;
 };
 
-const initialState: TAuthState = {
+export const initialState: TAuthState = {
   user: null,
   isLoading: false,
   error: null
@@ -116,16 +115,15 @@ const authSlice = createSlice({
       })
       .addCase(getUserWithToken.rejected, (state, action) => {
         state.isLoading = false;
+        state.error = action.payload || 'Ошибка получения данных пользователя';
       })
 
       .addCase(logout.pending, (state) => {
         state.isLoading = true;
       })
-      .addCase(logout.fulfilled, (state, action) => {
+      .addCase(logout.fulfilled, (state) => {
         state.isLoading = false;
         state.user = null;
-        deleteCookie('accessToken');
-        localStorage.removeItem('refreshToken');
       })
       .addCase(logout.rejected, (state, action) => {
         state.isLoading = false;

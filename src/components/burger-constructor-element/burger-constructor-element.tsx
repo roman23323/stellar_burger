@@ -17,7 +17,7 @@ export const BurgerConstructorElement: FC<BurgerConstructorElementProps> = memo(
     const handleMoveUp = () =>
       dispatch(moveIngredient({ ingredient, direction: -1 }));
 
-    const handleClose = () => dispatch(removeIngredient(ingredient));
+    const handleClose = () => dispatch(removeIngredient(ingredient.id));
 
     return (
       <BurgerConstructorElementUI
