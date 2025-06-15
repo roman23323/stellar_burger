@@ -75,12 +75,12 @@ describe('проверка создания заказа', () => {
       cy.get('@modal').contains(order.number);
     });
 
+    // Проверяем, что конструктор бургера пуст
+    cy.get('[data-testid^="constructor-"]').should('not.exist');
+    cy.get('[data-testid^="constructor-bun-"').should('not.exist');
+
     // Закрываем окно и проверяем, что оно закрыто
     cy.get('@modal').find('button').click();
     cy.get('@modal').should('not.exist');
-
-    // Проверяем, что коснтруктор бургера пуст
-    cy.get('[data-testid^="constructor-"]').should('not.exist');
-    cy.get('[data-testid^="constructor-bun-"').should('not.exist');
   });
 });
