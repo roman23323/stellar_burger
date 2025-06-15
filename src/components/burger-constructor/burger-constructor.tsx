@@ -1,4 +1,4 @@
-import { FC, useMemo } from 'react';
+import { FC, useEffect, useMemo } from 'react';
 import { TConstructorIngredient, TOrder } from '@utils-types';
 import { BurgerConstructorUI } from '@ui';
 import { useSelector } from 'react-redux';
@@ -39,8 +39,12 @@ export const BurgerConstructor: FC = () => {
       ])
     );
   };
+
+  useEffect(() => {
+    if (orderModalData) dispatch(removeAll());
+  }, [orderModalData]);
+
   const closeOrderModal = () => {
-    dispatch(removeAll());
     dispatch(clearOrderModalData());
   };
 
